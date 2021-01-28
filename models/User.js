@@ -1,16 +1,21 @@
 const mongoose=require('mongoose');
 const User=mongoose.model('User',{
     username:{
-        type:String
+        type:String,
+        require:true
     },
     email:{
-        type:String
+        type:String,
+        require:true,
+        unique:true
     },
     password:{
-        type:String
+        type:String,
+        require:true
     },
     phone:{
-        type:String
+        type:Number,
+        require:true
     },
     image:{
         type:String
