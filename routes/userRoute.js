@@ -3,6 +3,7 @@ const router=express.Router();
 const User=require('../models/User')
 const {check,validationResult}=require('express-validator')
 const bcryptjs=require('bcryptjs');
+const authentication=require('../middleware/authentication')
 router.post('/user/insert',[
     check('email',"Email is required!").not().isEmpty(),
     check('email',"It is not valid email").isEmail(),
@@ -35,10 +36,10 @@ router.post('/user/insert',[
             data.save()
             .then(function(result){
                 res.status(201).json({message:result})
-        })
-        .catch(function(e){
-            res.status(500).json({errormessage:e})
-        })
+            })
+            .catch(function(e){
+                res.status(500).json({errormessage:e})
+            })
         })
       
     }
@@ -47,9 +48,13 @@ router.post('/user/insert',[
     }
    
 })
-router.get('/user/fetch',function(req,res){
-    User.find().then(function(userdata){
-        res.send(userdata)
+router.get('/user/fetch',authentication.verifyUser,authentication.verifyAdmin,function(req,res){
+    User.find()
+    .then(function(userdata){
+        res.status(200).json({message:userdata})
+    })
+    .catch(function(e){
+        res.status(400).json({message:e})
     })
 })
 router.post('/user/login',function(req,res){
@@ -68,6 +73,32 @@ router.post('/user/login',function(req,res){
     })
     .catch(function(err){
         res.status(403).json({message:err})
+    })
+})
+router.put('/user/update',authentication.verifyUser,function(req,res){
+        const id=req.body.id
+        const username=req.body.username;
+        const email=req.body.email;
+        const phone=req.body.phone;
+        const image=req.body.image;
+        const gender=req.body.gender;
+        User.updateOne({_id:id},{username:username,email:email,phone:phone,image:image,gender:gender})
+        .then(function(result){
+            res.status(200).json({message:"Updated succefully!!"})
+        })
+        .catch(function(err){
+            res.status(403).json({message:err})
+        })
+
+})
+router.delete('user/delete',authentication.verifyUser,authentication.verifyAdmin,function(req,res){
+    const id=req.params.id
+    User.deleteOne({_id:id})
+    .then(function(result){
+        res.status(200).json({message:"Deleted Successfully!!"})
+    })
+    .catch(function(err){
+        res.status(400).json({message:err})
     })
 })
 

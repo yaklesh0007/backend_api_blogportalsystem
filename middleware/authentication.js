@@ -4,14 +4,14 @@ const User=require('../models/user_model')
 module.exports.verifyUser=function(req,res,next){
     try{
         const token=req.headers.authorization.split(" ")[1];
-    const data=jwt.verify(token, 'secretkey');
-    User.findOne({_id:data.uid})
-    .then(function(result){
-        req.user=result
-        next();
+        const data=jwt.verify(token, 'secretkey');
+        User.findOne({_id:data.uid})
+        .then(function(result){
+            req.user=result
+            next();
     })
-    .catch(function(result){
-        res.status(403).json({message:"Family"})
+    .catch(function(ex){
+        res.status(403).json(ex)
     })
     }
     catch(e){
@@ -31,7 +31,7 @@ module.exports.verifyAdmin=function(req,res,next){
     next()
 }
 //check for both
-module.exports.verifyAdminStudent=function(req,res,next){
+module.exports.verifyAdminNormalUser=function(req,res,next){
     if(!req.user)
     {
        return res.status(403).json({message:"user not allowed!"})
