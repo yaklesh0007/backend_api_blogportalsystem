@@ -1,5 +1,5 @@
 const mongoose=require('mongoose');
-const Vote=mongoose.module('Vote',{
+const Like=mongoose.module('Like',{
     count:{
         type:Number,
         required:true
@@ -14,4 +14,4 @@ const Vote=mongoose.module('Vote',{
     }
 })
 
-module.exports=Vote
+module.exports=Like
