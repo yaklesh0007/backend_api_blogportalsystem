@@ -46,5 +46,14 @@ router.delete('/category/delete/:id',authentication.verifyUser,authentication.ve
         res.status(403).json({message:err})
     })
 })
+router.get('/category/show',authentication.verifyUser,function(req,res){
+    Category.find()
+    .then(function(categorydata){
+        res.status(200).json({message:categorydata})
+    })
+    .catch(function(e){
+        res.status(400).json({message:e})
+    })
+})
 
 module.exports=router
