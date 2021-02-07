@@ -91,7 +91,7 @@ router.put('/user/update',authentication.verifyUser,function(req,res){
         })
 
 })
-router.delete('user/delete',authentication.verifyUser,authentication.verifyAdmin,function(req,res){
+router.delete('user/delete/:id',authentication.verifyUser,authentication.verifyAdmin,function(req,res){
     const id=req.params.id
     User.deleteOne({_id:id})
     .then(function(result){
