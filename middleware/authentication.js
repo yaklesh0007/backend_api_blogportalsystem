@@ -30,6 +30,17 @@ module.exports.verifyAdmin=function(req,res,next){
     }
     next()
 }
+//check for normal user
+
+module.exports.verifyNormalUser=function(req,res,next){
+    if(!req.user){
+        return res.status(403).json({message:"User not allowed !!"})
+    }
+    else if(req.user.userType!=='normaluser'){
+        return res.status(401).json({message:"Access denied!!"})
+    }
+    next()
+}
 //check for both
 module.exports.verifyAdminNormalUser=function(req,res,next){
     if(!req.user)
