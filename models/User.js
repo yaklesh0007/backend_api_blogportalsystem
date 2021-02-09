@@ -18,11 +18,12 @@ const User=mongoose.model('User',{
     phone:{
         type:Number,
         min:10,
-        max:14,
+       
         require:true
     },
     image:{
         type:String,
+        default:"noimg.jpeg"
     },
     gender:{
         type:String,

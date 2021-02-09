@@ -1,5 +1,5 @@
 const jwt=require('jsonwebtoken')
-const User=require('../models/user_model')
+const User=require('../models/User')
 //check for token
 module.exports.verifyUser=function(req,res,next){
     try{
@@ -8,7 +8,7 @@ module.exports.verifyUser=function(req,res,next){
         User.findOne({_id:data.uid})
         .then(function(result){
             req.user=result
-            next();
+            next()
     })
     .catch(function(ex){
         res.status(403).json(ex)

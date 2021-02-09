@@ -5,8 +5,8 @@ title:{
     required:true
 },
 image:{
-    type:String,
-    required:true
+    type:String
+    
 },
 description:{
     type:String,
@@ -19,8 +19,15 @@ userID:{
 categoryID:{
     type:String,
     required:true
-}
+},
+createdAT:{
+    type:Date,
+    default:Date.now
+},
+updateAT: {
+     type: Date, 
+     default: Date.now }
 
-},{ timestamps: true })
+})
 
 module.exports=Post

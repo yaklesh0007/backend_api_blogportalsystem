@@ -3,26 +3,29 @@ const router=express.Router();
 const Post=require('../models/Post')
 const {check,validationResult}=require('express-validator')
 const authentication=require('../middleware/authentication')
-
-router.post('/post/insert',[
+const upload=require('../middleware/upload')
+router.post('/blog/insert',[
     check('title',"Blog must have title").not().isEmpty(),
     check('description',"Blog must some short of description").not().isEmpty(),
-    check('image',"Blog should have some short of image").not().isEmpty(),
     check('userID',"user id is required").not().isEmpty(),
     check('categoryID',"It must be one of the Category").not().isEmpty()
-],authentication.verifyUser,function(req,res){
+],authentication.verifyUser,upload.single('image'),function(req,res){
 const errors=validationResult(req)
+if(req.file==undefined){
+    return res.status(400).json({message:"invalid image Type!!"})
+}
 if(errors.isEmpty()){
+    
     const title=req.body.title
     const description=req.body.description
-    const image=req.body.image
+    
     const userID=req.body.userID
     const categoryID=req.body.categoryID
-
+    
     const data=new Post({
         title:title,
         description:description,
-        image:image,
+        image:req.file.path,
         userID:userID,
         categoryID:categoryID
     })

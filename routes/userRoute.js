@@ -3,6 +3,7 @@ const router=express.Router();
 const User=require('../models/User')
 const {check,validationResult}=require('express-validator')
 const bcryptjs=require('bcryptjs');
+const jwt=require('jsonwebtoken')
 const authentication=require('../middleware/authentication')
 router.post('/user/insert',[
     check('email',"Email is required!").not().isEmpty(),
