@@ -61,7 +61,7 @@ function(req,res){
     }
 
 })
-router.delete('comment/delete:id',authentication.verifyUser,
+router.delete('/comment/delete/:id',authentication.verifyUser,
 authentication.verifyAdminNormalUser,function(req,res){
     const postedBY=req.body.userID
 
