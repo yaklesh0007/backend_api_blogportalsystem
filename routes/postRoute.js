@@ -92,4 +92,34 @@ function(req,res){
     }
    
 })
+router.put('/like',authentication.verifyUser,(req,res)=>{
+    Post.findByIdAndUpdate(req.body.postID,{
+        $push:{likes:req.user._id}
+    },
+    {
+        new:true
+    }).exec((err,result)=>{
+        if(err){
+            res.status(403).json({error:err})
+        }
+        else{
+            res.status(203).json({message:result})
+        }
+    })
+})
+router.put('/unlike',authentication.verifyUser,(req,res)=>{
+    Post.findByIdAndUpdate(req.body.postID,{
+        $pull:{likes:req.user._id}
+    },
+    {
+        new:true
+    }).exec((err,result)=>{
+        if(err){
+            res.status(403).json({error:err})
+        }
+        else{
+            res.status(203).json({message:result})
+        }
+    })
+})
 module.exports=router
