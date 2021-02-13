@@ -93,19 +93,10 @@ function(req,res){
    
 })
 router.put('/like',authentication.verifyUser,(req,res)=>{
-    Post.findByIdAndUpdate(req.body.postID,{
-        $push:{likes:req.user._id}
-    },
-    {
-        new:true
-    }).exec((err,result)=>{
-        if(err){
-            res.status(403).json({error:err})
-        }
-        else{
-            res.status(203).json({message:result})
-        }
-    })
+    console.log(req.body.postID)
+    Post.updateOne({_id:req.body.postID},{
+        $push:{likes:{LikedBy:req.user._id}}
+    }).then().catch()
 })
 router.put('/unlike',authentication.verifyUser,(req,res)=>{
     Post.findByIdAndUpdate(req.body.postID,{

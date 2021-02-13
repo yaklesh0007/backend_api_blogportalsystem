@@ -1,20 +1,20 @@
-const express=require('express');
-const router=express.Router();
+const express=require('express')
+const router=express.Router()
 const Comment=require('../models/Comment')
 const {check,validationResult}=require('express-validator')
 const authentication=require('../middleware/authentication')
-router.post('/comment/insert',[
+router.post('/comment/insert',
+[
     check('commentBody',"Comment must not be empty").not().isEmpty(),
     check('postID',"Comment on post should not be empty").not().isEmpty()
 ],authentication.verifyUser,function(req,res){
     const errors=validationResult(req)
     if(errors.isEmpty()){
-        const commentBody=req.body.commentBody,
-        const userID=req.user._id,
+        const commentBody=req.body.commentBody
         const postID=req.body.postID
         const data=new Comment({
             commentBody:commentBody,
-            userID:userID,
+            userID:req.user._id,
             postID:postID
         })
         data.save()
@@ -29,8 +29,8 @@ router.post('/comment/insert',[
         res.status(400).json(errors.array())
     }
 })
-router.get('/comment/:postID',authentication.verifyUser,function(req,res){
-    const postID=req.params.postID
+router.get('/comment',authentication.verifyUser,function(req,res){
+    const postID=req.body.postID
     Comment.find({postID:postID})
     .then(function(result){
         res.status(200).json({message:result})
@@ -65,7 +65,7 @@ router.delete('/comment/delete/:id',authentication.verifyUser,
 authentication.verifyAdminNormalUser,function(req,res){
     const postedBY=req.body.userID
 
-    if(req.user._id==postedBY){
+    if(postedBY==req.user._id){
         Comment.deleteOne({_id:req.params.id})
         .then(function(success){
             res.status(202).json({message:success})

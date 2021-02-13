@@ -1,5 +1,5 @@
 const mongoose=require('mongoose');
-const {ObjectId}=mongoose.model.type
+// const {ObjectId}=mongoose.model.type
 const Post=mongoose.model('Post',{
 title:{
     type:String,
@@ -21,7 +21,12 @@ categoryID:{
     type:String,
     required:true
 },
-likes:[{type:ObjectId,ref:"User"}],
+likes:{
+    LikedBy:{
+        type:String
+        
+    }
+},
 createdAT:{
     type:Date,
     default:Date.now

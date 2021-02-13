@@ -11,7 +11,16 @@ const Reply=mongoose.model('Reply',{
     commentID:{
         type:String,
         required:true
-    }
-},{timestamps:true})
+    },
+    createdAT:{
+        type:Date,
+        default:Date.now
+    },
+    updateAT: {
+         type: Date, 
+         default: Date.now }
+    
+    })
+
 
 module.exports=Reply
