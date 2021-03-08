@@ -11,11 +11,11 @@ router.post('/blog/insert'
 //     check('userID',"user id is required").not().isEmpty(),
 //     check('categoryID',"It must be one of the Category").not().isEmpty()
 // ]
-,authentication.verifyUser,upload.single('image'),function(req,res){
-const errors=validationResult(req)
-if(req.file==undefined){
-    return res.status(400).json({message:"invalid image Type!!"})
-}
+,authentication.verifyUser,function(req,res){
+// const errors=validationResult(req)
+// if(req.file==undefined){
+//     return res.status(400).json({message:"invalid image Type!!"})
+// }
 // if(errors.isEmpty()){
     
     const title=req.body.title
@@ -27,16 +27,16 @@ if(req.file==undefined){
     const data=new Post({
         title:title,
         description:description,
-        image:req.file.path,
+        
         userID:userID,
         categoryID:categoryID
     })
     data.save()
-    .then(function(result){
-        res.status(200).json({message:"Blog Added successfully!!"})
+    .then(function(data){
+        res.status(200).json({data,success:true})
     })
     .catch(function(e){
-        res.status(400).json({message:e})
+        res.status(400).json({message:e,success:false})
     })
 
     // }
@@ -64,14 +64,14 @@ if(req.user._id==postedBY){
  }   
 
 })
-router.get('/post/all',authentication.verifyUser,authentication.verifyAdminNormalUser,
+router.get('/post/all',authentication.verifyUser,
 function(req,res){
     Post.find()
-    .then(function(postData){
-        res.status(200).json({message:postData})
+    .then(function(data){
+        res.status(200).json({data,success:true})
     })
     .catch(function(e){
-        res.status(400).json({message:e})
+        res.status(400).json({message:e,success:false})
     })
 })
 router.delete('/post/delete/:id',authentication.verifyUser,
