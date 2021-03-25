@@ -3,6 +3,7 @@ const router=express.Router()
 const Comment=require('../models/Comment')
 const {check,validationResult}=require('express-validator')
 const authentication=require('../middleware/authentication')
+
 router.post('/comment/insert',
 [
     check('commentBody',"Comment must not be empty").not().isEmpty(),

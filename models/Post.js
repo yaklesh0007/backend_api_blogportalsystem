@@ -14,19 +14,15 @@ description:{
     required:true
 },
 userID:{
+    type:String
+    
+},
+category:{
     type:String,
-    required:true
+    
+    enum:['Social','IT','Personal development','Science and technology','Astrology','Political']
 },
-categoryID:{
-    type:String,
-    required:true
-},
-likes:{
-    LikedBy:{
-        type:String
-        
-    }
-},
+
 createdAT:{
     type:Date,
     default:Date.now

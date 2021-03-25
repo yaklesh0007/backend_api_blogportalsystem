@@ -8,37 +8,31 @@ const authentication=require('../middleware/authentication')
 const upload=require('../middleware/upload')
 const fs = require('fs')
 
-
 router.post('/user/insert',[
     check('email',"Email is required!").not().isEmpty(),
     check('email',"It is not valid email").isEmail(),
     check('username',"Firstname shouldnot be empty").not().isEmpty(),
     check('password',"password should not be empty!!!").not().isEmpty(),
     check('phone',"Phone should not be empty !!").not().isEmpty(),
-    
     check('userType',"user must be one of the Usertype").not().isEmpty()
 ],function(req,res){
-    
     
     const errors=validationResult(req);
     if(errors.isEmpty()){
         
         const email=req.body.email;
-        const emailalredyexit=User.findOne({email:email})
-        .then(function(ress){
-            return res;
-        })
-        .catch(function(errm){
-            res.json(203).json({message:errm})
-        })
-        if(!emailalredyexit){
-         res.status(404).json({message:"email already exit"})
-        }
-        else{
+        // const emailalredyexit=User.findOne({email:email})
+        // .then(function(ress){
+        //     return res.status(404).json({message:emailalredyexit,success:false})
+        // })
+        // .catch(function(errm){
+        //     res.json(203).json({message:errm})
+        // })
+        
         const username=req.body.username;
         const password=req.body.password;
         const phone=req.body.phone;
-        const image=req.body.image;
+        // const image=req.body.image;
         const gender=req.body.gender;
         const userType=req.body.userType;
         bcryptjs.hash(password,10,function(err,hash){
@@ -47,7 +41,7 @@ router.post('/user/insert',[
                 phone:phone,
                 email:email,
                 password:hash,
-                image:image,
+                // image:image,
                 gender:gender,
                 userType:userType
             })
@@ -61,7 +55,7 @@ router.post('/user/insert',[
             })
         
         })
-    }
+    
     }
     else{
         res.status(400).json(errors.array())
@@ -153,6 +147,16 @@ router.put('/user/profile/update',authentication.verifyUser,upload.single('image
     })
     .catch(function(e){
         res.status(500).json({message:e,success:false})
+    })
+})
+router.get('/user/:id',authentication.verifyUser,function(req,res){
+    User.findOne({_id:req.params.id})
+    .select("-password")
+    .then(data=>{
+        res.status(200).json({data,success:true})
+    })
+    .catch(err=>{
+        res.status(400).json({success:false})
     })
 })
 

@@ -3,7 +3,9 @@ const router=express.Router();
 const Reply=require('../models/Reply')
 const {check,validationResult}=require('express-validator')
 const authentication=require('../middleware/authentication')
-
+router.get('/aaa',function(req,res){
+    console.log("hallowen")
+})
 router.post('/reply/insert',[
     check('replybody',"Reply must not be empty").not().isEmpty(),
     check('commentID',"CommentID is required for reply to comment").not().isEmpty()

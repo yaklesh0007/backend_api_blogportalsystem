@@ -12,7 +12,7 @@ const User=mongoose.model('User',{
     password:{
         type:String,
         min:6,
-    max:15,
+        max:15,
         require:true
     },
     phone:{
@@ -25,12 +25,14 @@ const User=mongoose.model('User',{
         
     },
     gender:{
-        type:String
+        type:String,
+        enum:['Male','Female','Other']
         
     },
     userType:{
         type:String,
-        required:true
+        required:true,
+        enum:['normaluser','admin']
     }
 
 })

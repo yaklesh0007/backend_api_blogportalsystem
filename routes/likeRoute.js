@@ -2,7 +2,7 @@ const express=require('express');
 const router=express.Router();
 const Like=require('../models/Like')
 const authentication=require('../middleware/authentication')
-const { Router } = require('express');
+
 router.get('/like/history',authentication.verifyUser,function(req,res,){
     const postId=req.body.postId;
     Like.find({PosId:postId})
@@ -34,14 +34,18 @@ router.delete('/like/delete/:id',authentication.verifyUser,function(req,res){
 router.post('/like',authentication.verifyUser,function(req,res){
     const LikedBy=req.user._id;
     const PostId=req.body.postId;
+
+   Like.findOne({LikeBy:LikedBy,PostId:PostId})
+        
+
     const data=new Like({LikedBy:LikedBy,PostId:PostId})
     data.save()
      .then(function(succ){
          res.status(200).json({success:true,data})
      })
      .catch(function(e){
-         res.status(400).json({success:true,message:"error found while inserting data"})
+         res.status(400).json({success:true,e})
      })
 })
 
-module.exports=Router
+module.exports=router
