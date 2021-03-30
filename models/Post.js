@@ -14,7 +14,8 @@ description:{
     required:true
 },
 userID:{
-    type:String
+    type:mongoose.Schema.Types.ObjectId,
+    ref:'User'
     
 },
 category:{

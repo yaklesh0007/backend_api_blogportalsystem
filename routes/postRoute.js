@@ -15,14 +15,15 @@ router.post('/blog/insert'
     
 //     check('categoryID',"It must be one of the Category").not().isEmpty()
 // ]
-
+,
+upload.single('image')
 ,
 authentication.verifyUser,
 function(req,res){
 // const errors=validationResult(req)
-// if(req.file==undefined){
-//     return res.status(400).json({message:"invalid image Type!!"})
-// }
+if(req.file==undefined){
+    return res.status(400).json({message:"invalid image Type!!"})
+}
 
 // if(errors.isEmpty()){
    
@@ -30,14 +31,15 @@ function(req,res){
     const description=req.body.description
     const userID=req.user._id
     const category=req.body.category
-   
+    const image=req.file.path
     const data=new Post({
         title:title,
         description:description,
         userID:userID,
+        image:image,
         category:category
     })
-    console.log(req.body)
+    
     data.save()
     .then(function(data){
         res.status(200).json({data,success:true})
@@ -72,20 +74,27 @@ if(req.user._id==postedBY){
 
 })
 router.get('/post/all',
-//authentication.verifyUser,
+authentication.verifyUser,
 function(req,res){
-    Post.find()
+    Post.find().populate('userID')
     .then(function(data){
+        // .then((userData)=>{
+        //     res.status(200).json({success:true,data,userData})
+        // })
+        // .catch((err)=>{
+        //     res.status(400).json({success:false,err})
+        // })
         res.status(200).json({data,success:true})
     })
     .catch(function(e){
         res.status(400).json({message:e,success:false})
     })
 })
-router.delete('/post/delete/:id',authentication.verifyUser,
+router.delete('/post/delete/:id/:userID',authentication.verifyUser,
 function(req,res){
     const id=req.params.id
-    const userID=req.body.userID
+    
+    const userID=req.params.userID
     if(req.user._id==userID){
         Post.deleteOne({_id:id})
         .then(function(result){
@@ -100,19 +109,19 @@ function(req,res){
     }
    
 })
-router.get('/blog/single/:id',function(req,res){
+router.get('/blog/single/:id',authentication.verifyUser,function(req,res){
     const id=req.params.id;
     Post.findOne({_id:id})
 
     .then((data)=>{
-        User.findById(data.userID)
-        .then((userdata)=>{
-            res.status(200).json({data,userdata,success:true})
-        })
-        .catch((err)=>{
-            res.status(400).json({success:false,err})
-        })
-        // res.status(200).json({data,success:true})
+        // User.findById(data.userID)
+        // .then((userdata)=>{
+        //     res.status(200).json({data,userdata,success:true})
+        // })
+        // .catch((err)=>{
+        //     res.status(400).json({success:false,err})
+        // })
+        res.status(200).json({data,success:true})
     })
     .catch((e)=>{
         res.status(400).json({e,success:false})

@@ -1,9 +1,10 @@
 const express=require('express');//third party
 const bodyParser=require('body-parser')// coremodule
 const cors=require('cors');
-
+const path=require('path')
+const publicDir = path.join(__dirname,'public')
 const app=express();
-
+app.use(express.static(publicDir))
 app.use(express.json());
 app.use(bodyParser.urlencoded({extended: false}))
 
