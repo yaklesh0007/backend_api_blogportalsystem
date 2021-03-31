@@ -83,6 +83,7 @@ router.get("/images/user/:id", async function(req, res) {
 
 router.get('/user/profile',authentication.verifyUser,function(req,res){
     User.findById({_id:req.user._id})
+    .select("-password")
     .then(function(data){
         res.status(200).json({data,success:true})
     })
@@ -101,21 +102,26 @@ router.post('/user/login',function(req,res){
               return  res.status(401).json({message:" unAuthorized user"})
             }
            const token= jwt.sign({uid:userData._id},'secretkey');
-           res.status(200).json({success:true,token:token,userType:userData.userType})
+           res.status(200).json({success:true,token:token,userType:userData.userType,message:"login Successful"})
         })
     })
     .catch(function(err){
         res.status(403).json({message:err})
     })
 })
-router.put('/user/update',authentication.verifyUser,function(req,res){
-        const id=req.body.id
+router.put('/user/update',authentication.verifyUser,upload.single('image'),function(req,res){
+    if(req.file==undefined){
+        return res.status(400).json({message:"invalid image Type!!"})
+    }
+        const id=req.user._id
         const username=req.body.username;
-        const email=req.body.email;
+        // const email=req.body.email;
         const phone=req.body.phone;
-        
+        const image=req.file.path
         const gender=req.body.gender;
-        User.updateOne({_id:id},{username:username,email:email,phone:phone,gender:gender})
+        User.updateOne({_id:id},{username:username,
+            // email:email,
+            phone:phone,gender:gender,image:image})
         .then(function(result){
             res.status(200).json({message:"Updated succefully!!"})
         })
