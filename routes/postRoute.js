@@ -31,7 +31,7 @@ if(req.file==undefined){
     const description=req.body.description
     const userID=req.user._id
     const category=req.body.category
-    const image=req.file.path
+    const image=req.file.filename
     const data=new Post({
         title:title,
         description:description,

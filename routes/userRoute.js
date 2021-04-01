@@ -32,7 +32,7 @@ router.post('/user/insert',[
         const username=req.body.username;
         const password=req.body.password;
         const phone=req.body.phone;
-        // const image=req.body.image;
+        // const image=req.file.filename;
         const gender=req.body.gender;
         const userType=req.body.userType;
         bcryptjs.hash(password,10,function(err,hash){
@@ -82,7 +82,7 @@ router.get("/images/user/:id", async function(req, res) {
 })
 
 router.get('/user/profile',authentication.verifyUser,function(req,res){
-    User.findById({_id:req.user._id})
+    User.findOne({_id:req.user._id})
     .select("-password")
     .then(function(data){
         res.status(200).json({data,success:true})
@@ -117,16 +117,16 @@ router.put('/user/update',authentication.verifyUser,upload.single('image'),funct
         const username=req.body.username;
         // const email=req.body.email;
         const phone=req.body.phone;
-        const image=req.file.path
+        const image=req.file.filename
         const gender=req.body.gender;
         User.updateOne({_id:id},{username:username,
             // email:email,
             phone:phone,gender:gender,image:image})
-        .then(function(result){
-            res.status(200).json({message:"Updated succefully!!"})
+        .then(function(data){
+            res.status(200).json({message:"Updated succefully!!",success:true,data})
         })
         .catch(function(err){
-            res.status(403).json({message:err})
+            res.status(403).json({message:err,success:false})
         })
 
 })
