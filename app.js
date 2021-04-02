@@ -19,8 +19,9 @@ const blog_route=require('./routes/postRoute')
 const like_route=require('./routes/likeRoute')
 const comment_route=require('./routes/commentRoute')
 const reply_route=require('./routes/replyRoute')
+const feedback_route=require('./routes/feedbackRoute')
 app.use(like_route)
-
+app.use(feedback_route)
 app.use(comment_route)
 app.use(reply_route)
 

@@ -7,7 +7,7 @@ router.post('/addfeedback', function(req,res){
     const title=req.body.title
     const description=req.body.description
     
-    const data=new Like({
+    const data=new Feedback({
         email:email,
         title:title,
         description:description
