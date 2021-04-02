@@ -36,6 +36,10 @@ router.post('/like',authentication.verifyUser,function(req,res){
     const PostId=req.body.postId;
 
    Like.findOne({LikeBy:LikedBy,PostId:PostId})
+   .then(function(err){
+       res.status(404).json({message:"user alredy liked the post",success:true})
+   })
+   
         
 
     const data=new Like({LikedBy:LikedBy,PostId:PostId})
