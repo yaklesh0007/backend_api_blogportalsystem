@@ -5,8 +5,8 @@ commentBody:{
     required:true
 },
 userID:{
-    type:String,
-    required:true
+    type:mongoose.Schema.Types.ObjectId,
+    ref:'User'
 },
 postID:{
     type:String,

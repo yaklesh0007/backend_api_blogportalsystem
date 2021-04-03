@@ -76,7 +76,7 @@ if(req.user._id==postedBY){
 router.get('/post/all',
 authentication.verifyUser,
 function(req,res){
-    Post.find().populate('userID')
+    Post.find().populate('userID').select("-password")
     .then(function(data){
         // .then((userData)=>{
         //     res.status(200).json({success:true,data,userData})
@@ -111,7 +111,7 @@ function(req,res){
 })
 router.get('/blog/single/:id',authentication.verifyUser,function(req,res){
     const id=req.params.id;
-    Post.findOne({_id:id})
+    Post.findOne({_id:id}).populate('userID')
 
     .then((data)=>{
         // User.findById(data.userID)
@@ -126,6 +126,17 @@ router.get('/blog/single/:id',authentication.verifyUser,function(req,res){
     .catch((e)=>{
         res.status(400).json({e,success:false})
     })
+})
+router.get('/showmypost',authentication.verifyUser,function(req,res){
+const userID=
+    req.user._id
+Post.find({userID:userID})
+.then((data)=>{
+    res.status(200).json({data,success:true})
+})
+.catch((err)=>{
+    res.status(400).json({success:false,message:"unable to load data",err})
+})
 })
 // router.put('/like',authentication.verifyUser,(req,res)=>{
 //     console.log(req.body.postID)

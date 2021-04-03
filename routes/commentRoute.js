@@ -4,13 +4,14 @@ const Comment=require('../models/Comment')
 const {check,validationResult}=require('express-validator')
 const authentication=require('../middleware/authentication')
 
-router.post('/comment/insert',
+router.post('/comment/insert/',
 [
-    check('commentBody',"Comment must not be empty").not().isEmpty(),
-    check('postID',"Comment on post should not be empty").not().isEmpty()
+    check('commentBody',"Comment must not be empty").not().isEmpty()
+    
 ],authentication.verifyUser,function(req,res){
     const errors=validationResult(req)
     if(errors.isEmpty()){
+        
         const commentBody=req.body.commentBody
         const postID=req.body.postID
         const data=new Comment({
@@ -20,21 +21,23 @@ router.post('/comment/insert',
         })
         data.save()
         .then(function(result){
-            res.status(200).json({message:"Commented on blog successfully!!"})
+            // Comment.find({postID:postID})
+            // .then((commentdata))
+            res.status(200).json({message:"Commented on blog successfully!!",success:true,data})
         })
         .catch(function(e){
-            res.status(400).json({message:e})
+            res.status(400).json({message:e,success:false})
         })
     }
     else{
-        res.status(400).json(errors.array())
+        res.status(402).json(errors.array())
     }
 })
-router.get('/comment',authentication.verifyUser,function(req,res){
-    const postID=req.body.postID
-    Comment.find({postID:postID})
+router.get('/comment/:id',authentication.verifyUser,function(req,res){
+    const postID=req.params.id
+    Comment.find({postID:postID}).populate('userID')
     .then(function(result){
-        res.status(200).json({message:result})
+        res.status(200).json({result, message:"data found", success:true})
     })
     .catch(function(e){
         res.status(400).json({message:e})
