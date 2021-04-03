@@ -45,7 +45,7 @@ router.get('/comment/:id',authentication.verifyUser,function(req,res){
 
 })
 router.put('/comment/update/:id',authentication.verifyUser,
-authentication.verifyAdminNormalUser,
+
 function(req,res){
     const userID=req.body.userID
     const commentBody=req.body.commentBody
@@ -81,7 +81,15 @@ function(req,res){
     else{
         res.status(405).json({message:"not allowed to delete"})
     }
-    
+})
+router.get('/comment/single/:id',authentication.verifyUser,function(req,res){
+        Comment.findById({_id:req.params.id})
+        .then((data)=>{
+            res.status(200).json({data,success:true})
+        })
+        .catch((err)=>{
+            res.status(400).json({success:false,message:"unable to get data"})
+        })
 })
 
 module.exports=router
