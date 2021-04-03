@@ -65,17 +65,17 @@ function(req,res){
     }
 
 })
-router.delete('/comment/delete/:id',authentication.verifyUser,
-authentication.verifyAdminNormalUser,function(req,res){
-    const postedBY=req.body.userID
+router.delete('/comment/delete/:id/:userID',authentication.verifyUser,
+function(req,res){
+    const postedBY=req.params.userID
 
     if(postedBY==req.user._id){
         Comment.deleteOne({_id:req.params.id})
-        .then(function(success){
-            res.status(202).json({message:success})
+        .then(function(data){
+            res.status(202).json({message:"deleted succefully", success:true})
         })
         .catch(function(e){
-            res.status(500).json({message:e})
+            res.status(500).json({message:e, success:false})
         })
     }
     else{
