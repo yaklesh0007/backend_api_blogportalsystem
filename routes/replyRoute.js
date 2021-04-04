@@ -63,9 +63,9 @@ function(req,res){
     }
 
 })
-router.delete('/reply/delete/:id',authentication.verifyUser,
+router.delete('/reply/delete/:id/:userID',authentication.verifyUser,
 function(req,res){
-    const replyedBY=req.body.userID
+    const replyedBY=req.params.userID
 
     if(req.user._id==replyedBY){
         Reply.deleteOne({_id:req.params.id})
