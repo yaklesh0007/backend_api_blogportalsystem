@@ -3,17 +3,15 @@ const router=express.Router();
 const Reply=require('../models/Reply')
 const {check,validationResult}=require('express-validator')
 const authentication=require('../middleware/authentication')
-router.get('/aaa',function(req,res){
-    console.log("hallowen")
-})
+
 router.post('/reply/insert',[
-    check('replybody',"Reply must not be empty").not().isEmpty(),
-    check('commentID',"CommentID is required for reply to comment").not().isEmpty()
+    check('replyBody',"Reply must not be empty").not().isEmpty(),
+    
 ],authentication.verifyUser,function(req,res){
     const errors=validationResult(req)
     if(errors.isEmpty()){
-        const replybody=req.body.replybody
-       
+        
+        const replybody=req.body.replyBody
         const commentID=req.body.commentID
         const data=new Reply({
             replybody:replybody,
@@ -22,10 +20,10 @@ router.post('/reply/insert',[
         })
         data.save()
         .then(function(result){
-            res.status(200).json({message:"replyed to comment successfully!!"})
+            res.status(200).json({message:"replyed to comment successfully!!",success:true,data})
         })
         .catch(function(e){
-            res.status(400).json({message:e})
+            res.status(400).json({message:e,success:false})
         })
     }
     else{
@@ -34,12 +32,14 @@ router.post('/reply/insert',[
 })
 router.get('/reply/:commentID',authentication.verifyUser,function(req,res){
     const commentID=req.params.commentID
-    Reply.find({commentID:commentID})
-    .then(function(result){
-        res.status(200).json({message:result})
+    
+    Reply.find({commentID:commentID}).populate('userID')
+    .then(function(data){
+        res.status(200).json({message:"get all the reply on that comment",success:true,data})
     })
     .catch(function(e){
         res.status(400).json({message:e})
+        console.log(e)
     })
 
 })
@@ -80,6 +80,15 @@ function(req,res){
         res.status(405).json({message:"not allowed to delete"})
     }
     
+})
+router.get('/reply/single/:id',authentication.verifyUser,function(req,res){
+    Reply.findById(req.params.id)
+    .then(function(data){
+        res.status(200).json({success:true,data})
+    })
+    .catch((err)=>{
+        res.status(400).json({err,success:false})
+    })
 })
 
 module.exports=router

@@ -5,8 +5,8 @@ const Reply=mongoose.model('Reply',{
         required:true
     },
     userID:{
-        type:String,
-        required:true
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'User'
     },
     commentID:{
         type:String,

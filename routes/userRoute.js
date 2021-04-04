@@ -146,7 +146,7 @@ router.put('/user/profile/update',authentication.verifyUser,upload.single('image
     {            
         return res.status(400).json({message:"invalid image Type!!"})     
     }
-    const image=req.file.name
+    const image=req.file.filename
     User.updateOne({_id:id},{image:image})
     .then(function(data){
         res.status(202).json({message:"Updated profile successfully",data,success:true})
