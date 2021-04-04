@@ -54,6 +54,7 @@ if(req.file==undefined){
 // }
 })
 router.put('/post/update/:id',authentication.verifyUser,function(req,res){
+    
     const id=req.params.id;
     const title=req.body.title
     const description=req.body.description
@@ -114,19 +115,25 @@ router.get('/blog/single/:id',authentication.verifyUser,function(req,res){
     Post.findOne({_id:id}).populate('userID')
 
     .then((data)=>{
-        // User.findById(data.userID)
-        // .then((userdata)=>{
-        //     res.status(200).json({data,userdata,success:true})
-        // })
-        // .catch((err)=>{
-        //     res.status(400).json({success:false,err})
-        // })
+        
         res.status(200).json({data,success:true})
     })
     .catch((e)=>{
         res.status(400).json({e,success:false})
     })
 })
+router.get('/blogs/single/:id',authentication.verifyUser,function(req,res){
+    const id=req.params.id;
+    Post.findOne({_id:id})
+    .then((data)=>{
+        
+        res.status(200).json({data,success:true})
+    })
+    .catch((e)=>{
+        res.status(400).json({e,success:false})
+    })
+})
+
 router.get('/showmypost',authentication.verifyUser,function(req,res){
 const userID=
     req.user._id
