@@ -18,17 +18,29 @@ router.post('/user/insert',[
 ],function(req,res){
     
     const errors=validationResult(req);
+    const user = User.findOne({email : req.body.email});
+    if(user != null) {
+        return res.status(422).json({
+            success: false,
+            errors: [
+                {
+                    message : 'Email already exists',
+                    // param : 'email',
+                    // value : req.body.email,
+                    // location : 'body'
+                }
+            ]
+            // message:"email alredy exit !!!"
+        })
+    }
     if(errors.isEmpty()){
         
         const email=req.body.email;
-        // const emailalredyexit=User.findOne({email:email})
-        // .then(function(ress){
-        //     return res.status(404).json({message:emailalredyexit,success:false})
+        // User.findOne({email:email})
+        // .then(function(emailerr){
+        //   res.status(400).json({message:"email already exit  !!" ,success:false})
         // })
-        // .catch(function(errm){
-        //     res.json(203).json({message:errm})
-        // })
-        
+       
         const username=req.body.username;
         const password=req.body.password;
         const phone=req.body.phone;
