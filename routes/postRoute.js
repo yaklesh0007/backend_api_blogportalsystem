@@ -77,7 +77,7 @@ if(req.user._id==postedBY){
 router.get('/post/all',
 authentication.verifyUser,
 function(req,res){
-    Post.find().populate('userID').select("-password")
+    Post.find().populate('userID').select("-password").sort('-createdAT')
     .then(function(data){
         // .then((userData)=>{
         //     res.status(200).json({success:true,data,userData})
@@ -137,7 +137,7 @@ router.get('/blogs/single/:id',authentication.verifyUser,function(req,res){
 router.get('/showmypost',authentication.verifyUser,function(req,res){
 const userID=
     req.user._id
-Post.find({userID:userID})
+Post.find({userID:userID}).sort('-createdAT')
 .then((data)=>{
     res.status(200).json({data,success:true})
 })
@@ -166,4 +166,16 @@ Post.find({userID:userID})
 //         }
 //     })
 // })
+
+router.get('/search/:query',function(req,res){
+   
+    let searchpattern=new RegExp("^"+req.params.query)
+    Post.find({title:{$regex:searchpattern}})
+    .then(blog=>{
+        res.status(200).json({blog})
+    })
+    .catch(err=>{
+        res.status(400).json({message:"not found details"})
+    })
+})
 module.exports=router

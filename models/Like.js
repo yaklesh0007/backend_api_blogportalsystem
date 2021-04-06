@@ -1,10 +1,10 @@
 const mongoose=require('mongoose');
 const Like=mongoose.model('Like',{
     LikeBy:{
-        type:String,
-        required:true
+        type:String
+        ,required:true
     },
-    PosId:{
+    PostId:{
             type:String,
             required:true
     }

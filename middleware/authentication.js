@@ -23,6 +23,7 @@ module.exports.verifyUser=function(req,res,next){
     catch(e){
     
         res.status(403).json({error:e})
+        
     }
     
 }
