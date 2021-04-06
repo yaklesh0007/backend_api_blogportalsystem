@@ -59,22 +59,7 @@ router.get('/like/history/:postID',authentication.verifyUser,function(req,res,){
         res.status(400).json({success:false,message:"cannot found data of that post"})
     })
 })
-// router.delete('/like/delete/:id/:userID',authentication.verifyUser,function(req,res){
-//     const LikeBY=req.params.userID
-//     if(LikeBy==req.user._id)
-//     {
-//         Like.deleteOne({_id:req.params.id})
-//         .then(function(data){
-//             res.status(203).json({success:true})
-        
-//         })
-//         .catch(function(e){
-//             res.status(400).json({success:false})
-//         })
 
-//     }
-
-// })
 
 
 module.exports=router
