@@ -152,7 +152,7 @@ router.delete('user/delete/:id',authentication.verifyUser,authentication.verifyA
         res.status(400).json({message:err})
     })
 })
-router.put('/user/profile/update',authentication.verifyUser,upload.single('image'),function(req,res){
+router.post('/user/profile/update', upload.single('image'),authentication.verifyUser,function(req,res){
     const id=req.user._id;
     if(req.file==undefined)
     {            

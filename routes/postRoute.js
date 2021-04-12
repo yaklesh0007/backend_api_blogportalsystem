@@ -6,15 +6,12 @@ const authentication=require('../middleware/authentication')
 const upload=require('../middleware/upload');
 const User = require('../models/User');
 const { json } = require('express');
-
+//for inserting the blog
 router.post('/blog/insert'
-// ,[
-
-//     check('title',"Blog must have title").not().isEmpty(),
-//     check('description',"Blog must some short of description").not().isEmpty(),
-    
-//     check('categoryID',"It must be one of the Category").not().isEmpty()
-// ]
+,[
+    check('title',"Blog must have title").not().isEmpty(),
+    check('description',"Blog must some short of description").not().isEmpty()
+]
 ,
 upload.single('image')
 ,
@@ -25,7 +22,7 @@ if(req.file==undefined){
     return res.status(400).json({message:"invalid image Type!!"})
 }
 
-// if(errors.isEmpty()){
+if(errors.isEmpty()){
    
     const title=req.body.title
     const description=req.body.description
@@ -48,13 +45,13 @@ if(req.file==undefined){
         res.status(400).json({message:e,success:false})
     })
 
-    
-// else{
-//     res.status(400).json(errors.array())
-// }
+}   
+else{
+    res.status(400).json(errors.array())
+}
 })
+//updated post
 router.put('/post/update/:id',authentication.verifyUser,function(req,res){
-    
     const id=req.params.id;
     const title=req.body.title
     const description=req.body.description
@@ -72,29 +69,24 @@ if(req.user._id==postedBY){
  else{
      res.status(405).json({message:"your are not allowed to update"})
  }   
-
 })
+//get all the posted blog
 router.get('/post/all',
 authentication.verifyUser,
 function(req,res){
     Post.find().populate('userID').select("-password").sort('-createdAT')
     .then(function(data){
-        // .then((userData)=>{
-        //     res.status(200).json({success:true,data,userData})
-        // })
-        // .catch((err)=>{
-        //     res.status(400).json({success:false,err})
-        // })
+        
         res.status(200).json({data,success:true})
     })
     .catch(function(e){
         res.status(400).json({message:e,success:false})
     })
 })
+// delete routes for deletin post
 router.delete('/post/delete/:id/:userID',authentication.verifyUser,
 function(req,res){
     const id=req.params.id
-    
     const userID=req.params.userID
     if(req.user._id==userID){
         Post.deleteOne({_id:id})
@@ -110,6 +102,7 @@ function(req,res){
     }
    
 })
+// get single post
 router.get('/blog/single/:id',authentication.verifyUser,function(req,res){
     const id=req.params.id;
     Post.findOne({_id:id}).populate('userID')

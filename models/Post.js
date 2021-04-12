@@ -1,5 +1,4 @@
 const mongoose=require('mongoose');
-// const {ObjectId}=mongoose.model.type
 const Post=mongoose.model('Post',{
 title:{
     type:String,
