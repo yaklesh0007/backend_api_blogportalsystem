@@ -50,6 +50,47 @@ else{
     res.status(400).json(errors.array())
 }
 })
+
+//android insert for blog
+router.post('/android/blogs/insert',authentication.verifyUser,function(req,res){
+console.log(req.body)
+const title=req.body.title
+const description=req.body.description
+const userID=req.user._id
+const category=req.body.category
+const data=new Post({
+    title:title,
+    description:description,
+    userID:userID,
+    category:category
+})
+
+data.save()
+.then(function(data){
+    res.status(200).json({data,success:true,message:"added succefully"})
+})
+.catch(function(e){
+    res.status(400).json({message:e,success:false})
+})
+})
+//insert image
+router.post('/blog/:id/image', upload.single('image'),authentication.verifyUser,function(req,res){
+    const id=req.params.id;
+    if(req.file==undefined)
+    {            
+        return res.status(400).json({message:"invalid image Type!!"})     
+    }
+    const image=req.file.filename
+    Post.updateOne({_id:id},{image:image})
+    .then(function(data){
+        res.status(202).json({message:"Updated profile successfully",data,success:true})
+    })
+    .catch(function(e){
+        res.status(500).json({message:e,success:false})
+    })
+})
+
+
 //updated post
 router.put('/post/update/:id',authentication.verifyUser,function(req,res){
     const id=req.params.id;
@@ -132,10 +173,11 @@ const userID=
     req.user._id
 Post.find({userID:userID}).sort('-createdAT')
 .then((data)=>{
-    res.status(200).json({data,success:true})
+    res.status(200).json({data:data,success:true})
+    console.log(data)
 })
 .catch((err)=>{
-    res.status(400).json({success:false,message:"unable to load data",err})
+    res.status(400).json({success:false})
 })
 })
 // router.put('/like',authentication.verifyUser,(req,res)=>{

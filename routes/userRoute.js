@@ -142,6 +142,22 @@ router.put('/user/update',authentication.verifyUser,upload.single('image'),funct
         })
 
 })
+//updateprofile ifno from android
+router.put('/update/profileinfo',authentication.verifyUser,function(req,res){
+    const id=req.user._id
+    const username=req.body.username;
+    const phone=req.body.phone;
+    const gender=req.body.gender;
+    User.updateOne({_id:id},{username:username,
+        
+        phone:phone,gender:gender})
+    .then(function(Data){
+        res.status(200).json({message:"Updated succefully!!",success:true,Data})
+    })
+    .catch(function(err){
+        res.status(403).json({message:err,success:false})
+    })
+})
 router.delete('user/delete/:id',authentication.verifyUser,authentication.verifyAdmin,function(req,res){
     const id=req.params.id
     User.deleteOne({_id:id})
@@ -167,6 +183,7 @@ router.post('/user/profile/update', upload.single('image'),authentication.verify
         res.status(500).json({message:e,success:false})
     })
 })
+
 router.get('/user/:id',authentication.verifyUser,function(req,res){
     User.findOne({_id:req.params.id})
     .select("-password")
