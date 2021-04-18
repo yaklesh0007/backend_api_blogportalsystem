@@ -19,7 +19,7 @@ router.post('/reply/insert',[
             commentID:commentID
         })
         data.save()
-        .then(function(result){
+        .then(function(data){
             res.status(200).json({message:"replyed to comment successfully!!",success:true,data})
         })
         .catch(function(e){

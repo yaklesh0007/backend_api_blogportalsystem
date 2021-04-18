@@ -94,6 +94,7 @@ router.post('/blog/:id/image', upload.single('image'),authentication.verifyUser,
 //updated post
 router.put('/post/update/:id',authentication.verifyUser,function(req,res){
     const id=req.params.id;
+   
     const title=req.body.title
     const description=req.body.description
     const postedBY=req.body.userID
@@ -101,14 +102,14 @@ router.put('/post/update/:id',authentication.verifyUser,function(req,res){
 if(req.user._id==postedBY){
     Post.updateOne({_id:id},{title:title,description:description,category:category})
     .then(function(result){
-        res.status(203).json({message:"Updated sucessfully !!"})
+        res.status(203).json({message:"Updated sucessfully !!",result,success:true})
     })
     .catch(function(e){
-        res.status(404).json({message:e})
+        res.status(404).json({message:e,success:false})
     })
 }
  else{
-     res.status(405).json({message:"your are not allowed to update"})
+     res.status(405).json({message:"your are not allowed to update",success:false})
  }   
 })
 //get all the posted blog
@@ -131,18 +132,20 @@ function(req,res){
     const userID=req.params.userID
     if(req.user._id==userID){
         Post.deleteOne({_id:id})
-        .then(function(result){
-            res.status(201).json({message:"Deleted Successfully !!"})
+        .then(function(data){
+            res.status(201).json({message:"Deleted Successfully !!",data,success:true})
         })
         .catch(function(e){
-            res.status(500).json({message:e})
+            res.status(500).json({message:e,success:false})
         })
     }
     else{
-        res.status(405).json({message:"not allowed to delete the blog"})
+        
+        res.status(405).json({message:"not allowed to delete the blog",success:false})
     }
    
 })
+
 // get single post
 router.get('/blog/single/:id',authentication.verifyUser,function(req,res){
     const id=req.params.id;
@@ -174,7 +177,7 @@ const userID=
 Post.find({userID:userID}).sort('-createdAT')
 .then((data)=>{
     res.status(200).json({data:data,success:true})
-    console.log(data)
+  
 })
 .catch((err)=>{
     res.status(400).json({success:false})

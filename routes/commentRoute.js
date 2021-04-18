@@ -20,9 +20,8 @@ router.post('/comment/insert/',
             postID:postID
         })
         data.save()
-        .then(function(result){
-            // Comment.find({postID:postID})
-            // .then((commentdata))
+        .then(function(data){
+            
             res.status(200).json({message:"Commented on blog successfully!!",success:true,data})
         })
         .catch(function(e){
@@ -35,13 +34,16 @@ router.post('/comment/insert/',
 })
 router.get('/comment/:id',authentication.verifyUser,function(req,res){
     const postID=req.params.id
+    
     Comment.find({postID:postID}).populate('userID')
     .then(function(result){
+        
         res.status(200).json({result, message:"data found", success:true})
     })
     .catch(function(e){
-        res.status(400).json({message:e})
+        res.status(400).json({message:e,success:false})
     })
+    
 
 })
 router.put('/comment/update/:id',authentication.verifyUser,

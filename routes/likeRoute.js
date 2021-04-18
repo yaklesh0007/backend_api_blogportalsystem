@@ -4,9 +4,10 @@ const Like=require('../models/Like')
 const authentication=require('../middleware/authentication')
 router.get('/likes/onpost/:postID',authentication.verifyUser,function(req,res,){
     const postId=req.params.postId;
-    Like.find({PostId:postId})
+    Like.find({PostId:postId}).populate('LikeBy').select("-password")
     .then(function(data){
-        res.status(200).json({success:true,data})
+        
+        res.status(200).json({success:true,data:data})
     })
     .catch(function(err){
         res.status(400).json({success:false,message:"cannot found data of that post"})
