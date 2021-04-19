@@ -114,7 +114,7 @@ router.post('/user/login',function(req,res){
               return  res.status(401).json({message:" unAuthorized user"})
             }
            const token= jwt.sign({uid:userData._id},'secretkey');
-           res.status(200).json({success:true,token:token,userType:userData.userType,message:"login Successful"})
+           res.status(200).json({success:true,token:token,userType:userData.userType,message:"login Successful", userData})
         })
     })
     .catch(function(err){

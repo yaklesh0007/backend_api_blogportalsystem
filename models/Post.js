@@ -19,7 +19,6 @@ userID:{
 },
 category:{
     type:String,
-    
     enum:['Social','IT','Personal development','Science and technology','Astrology','Political']
 },
 

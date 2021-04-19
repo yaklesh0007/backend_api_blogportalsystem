@@ -10,7 +10,7 @@ router.post('/reply/insert',[
 ],authentication.verifyUser,function(req,res){
     const errors=validationResult(req)
     if(errors.isEmpty()){
-        
+        console.log(req.body)
         const replybody=req.body.replyBody
         const commentID=req.body.commentID
         const data=new Reply({
@@ -23,12 +23,31 @@ router.post('/reply/insert',[
             res.status(200).json({message:"replyed to comment successfully!!",success:true,data})
         })
         .catch(function(e){
+            console.log(e)
             res.status(400).json({message:e,success:false})
         })
     }
     else{
         res.status(400).json(errors.array())
     }
+})
+router.post('/insert/reply',authentication.verifyUser,function(req,res){
+    const replybody=req.body.replybody
+        const commentID=req.body.commentID
+        const data=new Reply({
+            replybody:replybody,
+            userID:req.user._id,
+            commentID:commentID
+        })
+        data.save()
+        .then(function(data){
+            res.status(200).json({message:"replyed to comment successfully!!",success:true,data})
+        })
+        .catch(function(e){
+            console.log(e)
+            res.status(400).json({message:e,success:false})
+        })
+
 })
 router.get('/reply/:commentID',authentication.verifyUser,function(req,res){
     const commentID=req.params.commentID
@@ -51,8 +70,8 @@ function(req,res){
     
     if(req.user._id==userID){
         Reply.updateOne({_id:id},{replybody:replybody})
-        .then(function(success){
-            res.status(202).json({message:success})
+        .then(function(data){
+            res.status(202).json({mesage:"updated",success:true,data})
         })
         .catch(function(e){
             res.status(500).json({message:e})
@@ -69,8 +88,8 @@ function(req,res){
 
     if(req.user._id==replyedBY){
         Reply.deleteOne({_id:req.params.id})
-        .then(function(success){
-            res.status(202).json({message:success})
+        .then(function(data){
+            res.status(202).json({message:"deleted",data,success:true})
         })
         .catch(function(e){
             res.status(500).json({message:e})
