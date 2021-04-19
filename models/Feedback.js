@@ -14,9 +14,9 @@ const Feedback=mongoose.model('Feedback',{
         required:true
     },
     approved:{
-        type:Boolean
-    }
-    ,
+        type:Boolean,
+        default:false
+    },
     createdAT:{
         type:Date,
         default:Date.now
