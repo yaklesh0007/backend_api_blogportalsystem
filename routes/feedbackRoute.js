@@ -21,7 +21,7 @@ router.post('/addfeedback', authentication.verifyUser,function(req,res){
     })
 })
 router.get('/fetchfeedback',authentication.verifyUser,authentication.verifyAdmin,function(req,res){
-    Feedback.find()
+    Feedback.find().populate('userID').select('-password').sort('-createdAT')
     .then(function(data){
         res.status(200).json({data,success:true})
     })
@@ -29,6 +29,16 @@ router.get('/fetchfeedback',authentication.verifyUser,authentication.verifyAdmin
         res.status(400).json({success:false,err})
     })
 })
+// router.get('/fetchfeedback/unapproved',authentication.verifyUser,authentication.verifyAdmin,function(req,res){
+//     Feedback.find({approved:false}).populate('userID').select('-password').sort('-createdAT')
+//     .then(function(data){
+//         res.status(200).json({data,success:true})
+//     })
+//     .catch((err)=>{
+//         res.status(400).json({success:false,err})
+//     })
+// })
+
 router.get('/getapproved/feedback',function(req,res){
     Feedback.find({approved:true}).populate('userID').select("-password").sort('-createdAT')
     .then(function(data){
@@ -37,10 +47,19 @@ router.get('/getapproved/feedback',function(req,res){
     .catch((err)=>{
         res.status(400).json({success:false,err})
     })
-
 })
+
 router.put('/approve/feedback/:id',function(req,res){
-    Feedback.updateOne({_id:req.params.id})
+    Feedback.updateOne({_id:req.params.id},{approved:true})
+    .then(function(data){
+        res.status(200).json({data,success:true})
+    })
+    .catch((err)=>{
+        res.status(400).json({success:false,err})
+    })
+})
+router.put('/unapprove/feedback/:id',function(req,res){
+    Feedback.updateOne({_id:req.params.id},{approved:false})
     .then(function(data){
         res.status(200).json({data,success:true})
     })
@@ -51,8 +70,8 @@ router.put('/approve/feedback/:id',function(req,res){
 
 router.delete('/feedback/delete/:id',authentication.verifyUser,authentication.verifyAdmin,function(req,res){
     Feedback.deleteOne({_id:req.params.id})
-    .then((del)=>{
-        res.status(200).json({success:true,message:"deleted feedback !!"})
+    .then((data)=>{
+        res.status(200).json({success:true,message:"deleted feedback !!",data})
     })
     .catch((err)=>{
         res.status(400).json({success:false,err})

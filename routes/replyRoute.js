@@ -10,7 +10,7 @@ router.post('/reply/insert',[
 ],authentication.verifyUser,function(req,res){
     const errors=validationResult(req)
     if(errors.isEmpty()){
-        console.log(req.body)
+        
         const replybody=req.body.replyBody
         const commentID=req.body.commentID
         const data=new Reply({
