@@ -8,11 +8,12 @@ const User = require('../models/User');
 const { json } = require('express');
 //for inserting the blog
 router.post('/blog/insert'
-,[
-    check('title',"Blog must have title").not().isEmpty(),
-    check('description',"Blog must some short of description").not().isEmpty()
-]
 ,
+// [
+//     check('title',"Blog must have title").not().isEmpty(),
+//     check('description',"Blog must some short of description").not().isEmpty()
+// ]
+// ,
 upload.single('image')
 ,
 authentication.verifyUser,
@@ -22,7 +23,7 @@ if(req.file==undefined){
     return res.status(400).json({message:"invalid image Type!!"})
 }
 
-if(errors.isEmpty()){
+// if(errors.isEmpty()){
    
     const title=req.body.title
     const description=req.body.description
@@ -42,14 +43,16 @@ if(errors.isEmpty()){
         res.status(200).json({data,success:true})
     })
     .catch(function(e){
+        console.log(e)
         res.status(400).json({message:e,success:false})
     })
 
 }   
-else{
-    res.status(400).json(errors.array())
-}
-})
+// else{
+//     res.status(400).json(errors.array())
+// }
+// }
+)
 
 //android insert for blog
 router.post('/android/blogs/insert',authentication.verifyUser,function(req,res){
