@@ -16,36 +16,32 @@ afterAll(async () => {
 
     describe('blog Schema test anything', () => {
         // the code below is for insert testing
-    //     it('Add blog testing anything', () => {
-    //     const blog = {
-    //     'title': 'Nokia',
-    //     'description': 'dsnkdakndkdas',
-    //     'category':'Social',
-    //     'userID':'60507e787f2b983230735194'
-    //     };
-    //     return Post.create(blog)
-    //     .then((pro_ret) => {
-    //     expect(pro_ret.title).toEqual('Nokia');
-    //     })
+        it('Add blog testing anything', () => {
+        const blog = {
+        'title': 'Nokia',
+        'description': 'dsnkdakndkdas',
+        'category':'Social',
+        'userID':'60507e787f2b983230735194'
+        };
+        return Post.create(blog)
+        .then((pro_ret) => {
+        expect(pro_ret.title).toEqual('Nokia');
+        })
 
-    // })
-})
-
-// // for updating the blog
-// it('to test the update', async () => {
-//     return Post.findOneAndUpdate({_id :Object('607e7bfc90f9510f14bc13aa')},
-//     {$set : {title:'apple'}})
-//     .then((pp)=>{
-//     expect(pp.title).toEqual('apple')
-//     })
-//     });
+    })
+    // // for updating the blog
+it('to test the update', async () => {
+    return Post.findOneAndUpdate({_id :Object('607e7bfc90f9510f14bc13aa')},
+    {$set : {title:'apple'}})
+    .then((pp)=>{
+    expect(pp.title).toEqual('apple')
+    })
+    });
 // // the code below is for delete testing
-// it('to test the delete product is working or not', async () => {
-//     const status = await Post.deleteOne({id:"607e7bfc90f9510f14bc13aa"})
-//     expect(status.ok).toBe(1);
-//     })
-
-
+it('to test the delete product is working or not', async () => {
+    const status = await Post.deleteOne({id:"607e7bfc90f9510f14bc13aa"})
+    expect(status.ok).toBe(1);
+    })
 // get user info
 it('to test the get product by id', async () => {
     return Post.findById("607e7f7c6607fd2600d8e938")
@@ -53,6 +49,10 @@ it('to test the get product by id', async () => {
     expect(pp.title).toEqual('Nokia')
     })
     });
+
+})
+
+
 
        
        
