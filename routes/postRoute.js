@@ -183,28 +183,16 @@ Post.find({userID:userID}).sort('-createdAT')
     res.status(400).json({success:false})
 })
 })
-// router.put('/like',authentication.verifyUser,(req,res)=>{
-//     console.log(req.body.postID)
-//     Post.updateOne({_id:req.body.postID},{
-//         $push:{likes:{LikedBy:req.user._id}}
-//     }).then().catch()
-// })
-// router.put('/unlike',authentication.verifyUser,(req,res)=>{
-//     Post.findByIdAndUpdate(req.body.postID,{
-//         $pull:{likes:req.user._id}
-//     },
-//     {
-//         new:true
-//     }).exec((err,result)=>{
-//         if(err){
-//             res.status(403).json({error:err})
-//         }
-//         else{
-//             res.status(203).json({message:result})
-//         }
-//     })
-// })
 
+router.get('/getfrom/:category',function(req,res){
+const category=req.params.category
+Post.find({category:category}).populate('userID').sort('-createdAT')
+.then((data)=>{
+    res.status(200).json({success:true,data,message:"fetched from category"})
+}).catch((err)=>{
+    res.status(400).json({success:false,message:err})
+})
+})
 router.get('/search/:query',function(req,res){
    
     let searchpattern=new RegExp("^"+req.params.query)
@@ -216,4 +204,5 @@ router.get('/search/:query',function(req,res){
         res.status(400).json({message:"not found details"})
     })
 })
+
 module.exports=router
