@@ -62,6 +62,7 @@ router.post('/user/insert',[
 
             })
             .catch(function(e){
+                // console.log(e)
                 res.status(500).json({message:e,success:false})
                 
             })

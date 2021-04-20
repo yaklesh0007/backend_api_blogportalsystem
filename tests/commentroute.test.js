@@ -35,7 +35,7 @@ afterAll(async () => {
         })
         });
 
-         // get Comment info
+        //  get Comment info
     it('to test the get product by id', async () => {
         return Comment.findById("607e7f7c6607fd2600d8e938")
         .then((pp)=>{

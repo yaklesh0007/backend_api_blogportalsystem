@@ -97,7 +97,28 @@ router.post('/blog/:id/image', upload.single('image'),authentication.verifyUser,
 //updated post
 router.put('/post/update/:id',authentication.verifyUser,function(req,res){
     const id=req.params.id;
-   
+   console.log(req.body)
+    const title=req.body.title
+    const description=req.body.description
+    const postedBY=req.body.userID._id
+    const category=req.body.category
+if(req.user._id==postedBY){
+    Post.updateOne({_id:id},{title:title,description:description,category:category})
+    .then(function(result){
+        res.status(203).json({message:"Updated sucessfully !!",result,success:true})
+    })
+    .catch(function(e){
+        res.status(404).json({message:e,success:false})
+    })
+}
+ else{
+     res.status(405).json({message:"your are not allowed to update",success:false})
+ }   
+})
+//
+router.put('/post/updates/:id',authentication.verifyUser,function(req,res){
+    const id=req.params.id;
+   console.log(req.body)
     const title=req.body.title
     const description=req.body.description
     const postedBY=req.body.userID
@@ -115,6 +136,7 @@ if(req.user._id==postedBY){
      res.status(405).json({message:"your are not allowed to update",success:false})
  }   
 })
+
 //get all the posted blog
 router.get('/post/all',
 authentication.verifyUser,

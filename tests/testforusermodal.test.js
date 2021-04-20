@@ -15,33 +15,30 @@ afterAll(async () => {
 
     describe('User Schema test anything', () => {
         // the code below is for insert testing
-    //     it('Add user testing anything', () => {
-    //     const user = {
+        it('Add user testing anything', () => {
+        const user = {
         
-    //     'email': 'emailuew@email.com',
-    //     'username':'testete',
-    //     'userType':'normaluser',
-    //     'phone':'9432014121',
-    //     'password':'ewrjoqerw',
-    //     'gender':'Male',
-    //     'image':'noimg.jpeg'
-    //     };
-    //     return User.create(user)
-    //     .then((pro_ret) => {
-    //     expect(pro_ret.username).toEqual('testete');
-    //     })
+        'email': 'emailuew21@email.com',
+        'username':'testete',
+        'userType':'normaluser',
+        'phone':'9432014121',
+        'password':'ewrjoqerw',
+        'gender':'Male',
+        'image':'noimg.jpeg'
+        };
+        return User.create(user)
+        .then((pro_ret) => {
+        expect(pro_ret.username).toEqual('testete');
+        })
 
-    // })
-
-})
-
-// it('to test the update profile info', async () => {
-//     return User.findOneAndUpdate({_id :Object('607e7bfc78ff1a19585e286e')},
-//     {$set : {username:'brad PIIT'}})
-//     .then((pp)=>{
-//     expect(pp.username).toEqual('brad PIIT')
-//     })
-//     }); 
+    })
+    it('to test the update profile info', async () => {
+    return User.findOneAndUpdate({_id :Object('607e7bfc78ff1a19585e286e')},
+    {$set : {username:'brad PIIT'}})
+    .then((pp)=>{
+    expect(pp.username).toEqual('brad PIIT')
+    })
+    }); 
     // get user info
     it('to test the get profile info', async () => {
         return User.findById("607e7bfc78ff1a19585e286e")
@@ -55,5 +52,9 @@ it('to test the delete product is working or not', async () => {
     const status = await User.deleteOne({id:"607e7bfc78ff1a19585e286e"})
     expect(status.ok).toBe(1);
     })
+
+
+})
+
 
     
